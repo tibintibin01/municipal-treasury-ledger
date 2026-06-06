@@ -24,7 +24,7 @@ namespace MunicipalTreasuryLedger
             host.ColumnCount = 1;
             host.RowCount = 4;
             host.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
-            host.RowStyles.Add(new RowStyle(SizeType.Absolute, 126));
+            host.RowStyles.Add(new RowStyle(SizeType.Absolute, 166));
             host.RowStyles.Add(new RowStyle(SizeType.Absolute, 190));
             host.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
@@ -214,24 +214,27 @@ namespace MunicipalTreasuryLedger
         {
             Panel panel = new Panel();
             panel.Dock = DockStyle.Fill;
-            panel.Margin = new Padding(0, 0, 10, 10);
-            panel.Padding = new Padding(12, 8, 12, 8);
+            panel.Margin = new Padding(0, 0, 10, 8);
+            panel.Padding = new Padding(12, 8, 12, 6);
             panel.BackColor = GridAltBack;
 
             Label titleLabel = new Label();
             titleLabel.Text = title;
             titleLabel.Dock = DockStyle.Top;
-            titleLabel.Height = 22;
+            titleLabel.Height = 24;
             titleLabel.ForeColor = TextMuted;
             titleLabel.Font = new Font("Segoe UI Semibold", 8.8F, FontStyle.Bold);
             titleLabel.TextAlign = ContentAlignment.MiddleLeft;
+            titleLabel.AutoEllipsis = true;
 
             valueLabel = new Label();
             valueLabel.Text = "0";
-            valueLabel.Dock = DockStyle.Fill;
+            valueLabel.Dock = DockStyle.Top;
+            valueLabel.Height = 34;
             valueLabel.ForeColor = TextMain;
             valueLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold);
             valueLabel.TextAlign = ContentAlignment.MiddleLeft;
+            valueLabel.AutoEllipsis = true;
 
             panel.Controls.Add(valueLabel);
             panel.Controls.Add(titleLabel);

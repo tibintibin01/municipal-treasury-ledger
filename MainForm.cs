@@ -160,7 +160,7 @@ namespace MunicipalTreasuryLedger
 
         public MainForm(TreasuryDataStore dataStore, LedgerDatabase database, UserAccount currentUser)
         {
-            Text = "Business Tax & Permit Collection System v0.3.40";
+            Text = "Business Tax & Permit Collection System v0.3.41";
             StartPosition = FormStartPosition.CenterScreen;
             Width = 1220;
             Height = 760;
