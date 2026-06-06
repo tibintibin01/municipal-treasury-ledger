@@ -160,7 +160,7 @@ namespace MunicipalTreasuryLedger
 
         public MainForm(TreasuryDataStore dataStore, LedgerDatabase database, UserAccount currentUser)
         {
-            Text = "Business Tax & Permit Collection System v0.3.41";
+            Text = "Business Tax & Permit Collection System v0.3.42";
             StartPosition = FormStartPosition.CenterScreen;
             Width = 1220;
             Height = 760;
@@ -368,7 +368,7 @@ namespace MunicipalTreasuryLedger
             exportButton.Click += ExportMenu_Click;
             actions.Controls.Add(exportButton);
 
-            Button importButton = MakeHeaderButton("Import CSV");
+            Button importButton = MakeHeaderButton("Import");
             importButton.Width = 108;
             importButton.Click += ImportCsv_Click;
             actions.Controls.Add(importButton);

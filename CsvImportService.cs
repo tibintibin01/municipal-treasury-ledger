@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Xml;
 
 namespace MunicipalTreasuryLedger
 {
@@ -39,6 +41,17 @@ namespace MunicipalTreasuryLedger
 
     public static class CsvImportService
     {
+        public static CsvImportResult PreviewBusinessLedgerFile(LedgerDatabase database, string filePath)
+        {
+            LedgerDatabase previewDatabase = CloneForPreview(database);
+            return ImportBusinessLedgerFile(previewDatabase, filePath);
+        }
+
+        public static CsvImportResult ImportBusinessLedgerFile(LedgerDatabase database, string filePath)
+        {
+            return ImportBusinessLedgerRows(database, ReadImportRows(filePath), Path.GetExtension(filePath));
+        }
+
         public static CsvImportResult PreviewBusinessLedgerCsv(LedgerDatabase database, string filePath)
         {
             LedgerDatabase previewDatabase = CloneForPreview(database);
@@ -54,7 +67,17 @@ namespace MunicipalTreasuryLedger
 
             if (String.IsNullOrEmpty(filePath) || !File.Exists(filePath))
             {
-                throw new FileNotFoundException("CSV import file was not found.", filePath);
+                throw new FileNotFoundException("Import file was not found.", filePath);
+            }
+
+            return ImportBusinessLedgerRows(database, ReadCsv(filePath), ".csv");
+        }
+
+        private static CsvImportResult ImportBusinessLedgerRows(LedgerDatabase database, List<string[]> rows, string sourceExtension)
+        {
+            if (database == null)
+            {
+                throw new ArgumentNullException("database");
             }
 
             if (database.Owners == null)
@@ -63,17 +86,16 @@ namespace MunicipalTreasuryLedger
             }
 
             CsvImportResult result = new CsvImportResult();
-            List<string[]> rows = ReadCsv(filePath);
             if (rows.Count == 0)
             {
-                result.Messages.Add("CSV file is empty.");
+                result.Messages.Add(SourceName(sourceExtension) + " file is empty.");
                 return result;
             }
 
             Dictionary<string, int> headers = BuildHeaderMap(rows[0]);
             if (headers.Count == 0)
             {
-                result.Messages.Add("CSV header row was not readable.");
+                result.Messages.Add(SourceName(sourceExtension) + " header row was not readable.");
                 return result;
             }
 
@@ -515,6 +537,180 @@ namespace MunicipalTreasuryLedger
             return rows;
         }
 
+        private static List<string[]> ReadImportRows(string filePath)
+        {
+            if (String.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            {
+                throw new FileNotFoundException("Import file was not found.", filePath);
+            }
+
+            string extension = Path.GetExtension(filePath);
+            if (String.Equals(extension, ".xlsx", StringComparison.OrdinalIgnoreCase))
+            {
+                return ReadXlsx(filePath);
+            }
+
+            if (String.Equals(extension, ".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                return ReadCsv(filePath);
+            }
+
+            throw new InvalidOperationException("Only .xlsx and .csv import files are supported.");
+        }
+
+        private static List<string[]> ReadXlsx(string filePath)
+        {
+            using (ZipArchive archive = ZipFile.OpenRead(filePath))
+            {
+                List<string> sharedStrings = ReadSharedStrings(archive);
+                ZipArchiveEntry sheetEntry = archive.GetEntry("xl/worksheets/sheet1.xml");
+                if (sheetEntry == null)
+                {
+                    sheetEntry = archive.Entries
+                        .Where(entry => entry.FullName.StartsWith("xl/worksheets/sheet", StringComparison.OrdinalIgnoreCase) &&
+                            entry.FullName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(entry => entry.FullName)
+                        .FirstOrDefault();
+                }
+
+                if (sheetEntry == null)
+                {
+                    throw new InvalidOperationException("Excel workbook does not contain a readable worksheet.");
+                }
+
+                XmlDocument document = LoadXml(sheetEntry);
+                XmlNamespaceManager namespaces = SpreadsheetNamespaces(document);
+                XmlNodeList rowNodes = document.SelectNodes("//x:sheetData/x:row", namespaces);
+                List<string[]> rows = new List<string[]>();
+                foreach (XmlNode rowNode in rowNodes)
+                {
+                    SortedDictionary<int, string> values = new SortedDictionary<int, string>();
+                    foreach (XmlNode cellNode in rowNode.SelectNodes("x:c", namespaces))
+                    {
+                        int columnIndex = ColumnIndexFromCellReference(GetAttribute(cellNode, "r"));
+                        if (columnIndex <= 0)
+                        {
+                            columnIndex = values.Count + 1;
+                        }
+
+                        values[columnIndex] = ReadCellValue(cellNode, namespaces, sharedStrings);
+                    }
+
+                    if (values.Count == 0)
+                    {
+                        rows.Add(new string[0]);
+                        continue;
+                    }
+
+                    string[] row = new string[values.Keys.Max()];
+                    foreach (KeyValuePair<int, string> item in values)
+                    {
+                        row[item.Key - 1] = item.Value;
+                    }
+
+                    rows.Add(row.Select(value => value ?? "").ToArray());
+                }
+
+                return rows;
+            }
+        }
+
+        private static List<string> ReadSharedStrings(ZipArchive archive)
+        {
+            List<string> values = new List<string>();
+            ZipArchiveEntry entry = archive.GetEntry("xl/sharedStrings.xml");
+            if (entry == null)
+            {
+                return values;
+            }
+
+            XmlDocument document = LoadXml(entry);
+            XmlNamespaceManager namespaces = SpreadsheetNamespaces(document);
+            XmlNodeList stringNodes = document.SelectNodes("//x:sst/x:si", namespaces);
+            foreach (XmlNode stringNode in stringNodes)
+            {
+                values.Add(InnerTextPreservingRuns(stringNode, namespaces));
+            }
+
+            return values;
+        }
+
+        private static XmlDocument LoadXml(ZipArchiveEntry entry)
+        {
+            XmlDocument document = new XmlDocument();
+            using (Stream stream = entry.Open())
+            {
+                document.Load(stream);
+            }
+
+            return document;
+        }
+
+        private static XmlNamespaceManager SpreadsheetNamespaces(XmlDocument document)
+        {
+            XmlNamespaceManager namespaces = new XmlNamespaceManager(document.NameTable);
+            namespaces.AddNamespace("x", "http://schemas.openxmlformats.org/spreadsheetml/2006/main");
+            return namespaces;
+        }
+
+        private static string ReadCellValue(XmlNode cellNode, XmlNamespaceManager namespaces, List<string> sharedStrings)
+        {
+            string cellType = GetAttribute(cellNode, "t");
+            if (String.Equals(cellType, "inlineStr", StringComparison.OrdinalIgnoreCase))
+            {
+                XmlNode inlineNode = cellNode.SelectSingleNode("x:is", namespaces);
+                return inlineNode == null ? "" : InnerTextPreservingRuns(inlineNode, namespaces).Trim();
+            }
+
+            XmlNode valueNode = cellNode.SelectSingleNode("x:v", namespaces);
+            string rawValue = valueNode == null ? "" : (valueNode.InnerText ?? "").Trim();
+            if (String.Equals(cellType, "s", StringComparison.OrdinalIgnoreCase))
+            {
+                int index;
+                if (Int32.TryParse(rawValue, out index) && index >= 0 && index < sharedStrings.Count)
+                {
+                    return sharedStrings[index].Trim();
+                }
+            }
+
+            return rawValue;
+        }
+
+        private static string InnerTextPreservingRuns(XmlNode node, XmlNamespaceManager namespaces)
+        {
+            XmlNodeList textNodes = node.SelectNodes(".//x:t", namespaces);
+            string value = "";
+            foreach (XmlNode textNode in textNodes)
+            {
+                value += textNode.InnerText;
+            }
+
+            return value;
+        }
+
+        private static string GetAttribute(XmlNode node, string name)
+        {
+            return node == null || node.Attributes == null || node.Attributes[name] == null
+                ? ""
+                : node.Attributes[name].Value;
+        }
+
+        private static int ColumnIndexFromCellReference(string reference)
+        {
+            int column = 0;
+            foreach (char c in reference ?? "")
+            {
+                if (!Char.IsLetter(c))
+                {
+                    break;
+                }
+
+                column = (column * 26) + (Char.ToUpperInvariant(c) - 'A' + 1);
+            }
+
+            return column;
+        }
+
         private static List<string> ParseCsvLine(string line)
         {
             List<string> values = new List<string>();
@@ -618,6 +814,23 @@ namespace MunicipalTreasuryLedger
         private static bool TryDate(string value, out DateTime date)
         {
             value = (value ?? "").Trim();
+            double serialDate;
+            if (Double.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out serialDate) &&
+                serialDate >= 1d &&
+                serialDate <= 60000d)
+            {
+                try
+                {
+                    date = DateTime.FromOADate(serialDate).Date;
+                    return true;
+                }
+                catch
+                {
+                    date = DateTime.MinValue;
+                    return false;
+                }
+            }
+
             string[] formats = new string[] { "yyyy-MM-dd", "MM/dd/yyyy", "M/d/yyyy", "yyyyMMdd" };
             return DateTime.TryParseExact(value, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date) ||
                 DateTime.TryParse(value, CultureInfo.CurrentCulture, DateTimeStyles.None, out date);
@@ -668,6 +881,11 @@ namespace MunicipalTreasuryLedger
             }
 
             return result;
+        }
+
+        private static string SourceName(string extension)
+        {
+            return String.Equals(extension, ".xlsx", StringComparison.OrdinalIgnoreCase) ? "Excel" : "CSV";
         }
     }
 }

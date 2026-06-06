@@ -19,7 +19,7 @@ namespace MunicipalTreasuryLedger
 
         private void BuildForm()
         {
-            Text = "Review CSV Import";
+            Text = "Review Import";
             StartPosition = FormStartPosition.CenterParent;
             ClientSize = new Size(780, 560);
             MinimumSize = new Size(720, 500);
@@ -43,7 +43,7 @@ namespace MunicipalTreasuryLedger
 
             Label header = new Label();
             header.Dock = DockStyle.Fill;
-            header.Text = "CSV Import Preview";
+            header.Text = "Import Preview";
             header.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold);
             header.ForeColor = Color.FromArgb(15, 42, 71);
             header.TextAlign = ContentAlignment.TopLeft;

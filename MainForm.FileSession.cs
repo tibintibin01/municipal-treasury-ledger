@@ -157,8 +157,8 @@ namespace MunicipalTreasuryLedger
             }
 
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Title = "Import Business Ledger CSV";
-            dialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            dialog.Title = "Import Business Ledger";
+            dialog.Filter = "Excel workbook (*.xlsx)|*.xlsx|CSV files (*.csv)|*.csv|All supported files (*.xlsx;*.csv)|*.xlsx;*.csv";
 
             if (dialog.ShowDialog(this) != DialogResult.OK)
             {
@@ -168,9 +168,9 @@ namespace MunicipalTreasuryLedger
             try
             {
                 CsvImportResult preview = null;
-                RunWithBusy("Reading CSV for preview...", delegate
+                RunWithBusy("Reading import file for preview...", delegate
                 {
-                    preview = CsvImportService.PreviewBusinessLedgerCsv(database, dialog.FileName);
+                    preview = CsvImportService.PreviewBusinessLedgerFile(database, dialog.FileName);
                 });
 
                 using (ImportPreviewForm previewForm = new ImportPreviewForm(preview, dialog.FileName))
@@ -183,7 +183,7 @@ namespace MunicipalTreasuryLedger
 
                 string safetyPath = "";
                 CsvImportResult result = null;
-                RunWithBusy("Importing CSV records...", delegate
+                RunWithBusy("Importing ledger records...", delegate
                 {
                     string safetyFolder = BackupService.GetEffectiveBackupFolder(dataStore, database);
                     Directory.CreateDirectory(safetyFolder);
@@ -191,8 +191,8 @@ namespace MunicipalTreasuryLedger
                     safetyPath = Path.Combine(safetyFolder, "before-import-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + safetyExtension);
                     dataStore.CreateBackup(database, safetyPath);
 
-                    result = CsvImportService.ImportBusinessLedgerCsv(database, dialog.FileName);
-                    LogAction("Import CSV", "Import", "", dialog.FileName + " | " + result.Summary + " | Safety backup: " + safetyPath);
+                    result = CsvImportService.ImportBusinessLedgerFile(database, dialog.FileName);
+                    LogAction("Import Ledger File", "Import", "", dialog.FileName + " | " + result.Summary + " | Safety backup: " + safetyPath);
                     dataStore.Save(database);
 
                     selectedOwner = null;
@@ -212,12 +212,12 @@ namespace MunicipalTreasuryLedger
                     message += "\n\nNotes:\n" + String.Join("\n", result.Messages.ToArray());
                 }
 
-                MessageBox.Show(message, "CSV import complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(message, "Import complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "CSV import failed.\n\nNo import changes were saved after the error.\n\n" + ex.Message,
+                    "Import failed.\n\nNo import changes were saved after the error.\n\n" + ex.Message,
                     "Import failed",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);

@@ -13,7 +13,7 @@ Desktop app for recording business owner registrations, renewals, yearly assessm
 - Forced password change when the first-run `admin/admin123` password is still active.
 - Automatic daily backup on app startup after successful login.
 - Automatic and manual backups are verified after creation.
-- CSV import for business owners, yearly assessments, and optional payment rows, with preview/validation and a safety backup before import.
+- Excel `.xlsx` and CSV import for business owners, yearly assessments, and optional payment rows, with preview/validation and a safety backup before import.
 - Excel `.xlsx` export plus CSV export for ledger review and Excel-based reporting.
 - Archive old assessment years to Excel, with optional purge after archive and safety backup.
 - Configurable backup folder via the **Backup To** header button.
@@ -31,7 +31,7 @@ Desktop app for recording business owner registrations, renewals, yearly assessm
 - Reduce tab clutter by showing management tabs based on role.
 - Show a busy status and progress indicator during save, import, export, backup, restore, archive, and record update operations.
 - Add icon + text styling to action buttons, with red destructive buttons.
-- Import business owner/index-card data from CSV using the **Import CSV** header button.
+- Import business owner/index-card data from Excel or CSV using the **Import** header button.
 - Search by owner/business fields plus address, remarks, assessment year, OR number, payment schedule, payment remarks, date, or amount.
 - Record yearly assessment details:
   - Year
@@ -103,9 +103,9 @@ The app will be created here:
 dist\MunicipalTreasuryLedger.exe
 ```
 
-## CSV import
+## Excel and CSV import
 
-Use **Import CSV** to migrate owner and assessment records from Excel. The app first shows a preview with the number of owners, assessments, and payments that will be created or updated, plus validation notes for skipped rows. If you continue from the preview, the app creates a safety backup before committing the import.
+Use **Import** to migrate owner and assessment records from Excel `.xlsx` or CSV. The app first shows a preview with the number of owners, assessments, and payments that will be created or updated, plus validation notes for skipped rows. If you continue from the preview, the app creates a safety backup before committing the import.
 
 Supported headers include:
 

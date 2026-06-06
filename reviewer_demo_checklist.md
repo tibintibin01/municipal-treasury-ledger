@@ -1,6 +1,6 @@
 # Business Tax & Permit Collection System - Reviewer Demo Checklist
 
-Version: v0.3.41
+Version: v0.3.42
 
 ## Positioning
 
@@ -51,7 +51,7 @@ It is not positioned as a complete Municipal Treasury replacement. It does not c
 
 8. Export and archive
    - Export the ledger to Excel.
-   - Export CSV if needed.
+   - Import or export Excel/CSV if needed.
    - Preview Archive/Purge using an old year before actually purging.
 
 9. Backup and restore
