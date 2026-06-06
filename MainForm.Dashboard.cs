@@ -20,17 +20,19 @@ namespace MunicipalTreasuryLedger
             TableLayoutPanel host = new TableLayoutPanel();
             host.Dock = DockStyle.Fill;
             host.Padding = new Padding(12);
-            host.BackColor = SurfaceBack;
+            host.BackColor = WindowBack;
             host.ColumnCount = 1;
             host.RowCount = 4;
             host.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
-            host.RowStyles.Add(new RowStyle(SizeType.Absolute, 166));
-            host.RowStyles.Add(new RowStyle(SizeType.Absolute, 190));
+            host.RowStyles.Add(new RowStyle(SizeType.Absolute, 160));
+            host.RowStyles.Add(new RowStyle(SizeType.Absolute, 320));
             host.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             TableLayoutPanel filterBar = new TableLayoutPanel();
             filterBar.Dock = DockStyle.Fill;
-            filterBar.BackColor = SurfaceBack;
+            filterBar.BackColor = WindowBack;
+            filterBar.Margin = new Padding(0, 0, 12, 8);
+            filterBar.Padding = new Padding(0, 0, 0, 0);
             filterBar.ColumnCount = 5;
             filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             filterBar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70));
@@ -67,7 +69,8 @@ namespace MunicipalTreasuryLedger
 
             TableLayoutPanel metrics = new TableLayoutPanel();
             metrics.Dock = DockStyle.Fill;
-            metrics.BackColor = SurfaceBack;
+            metrics.BackColor = Color.Transparent;
+            metrics.Margin = new Padding(0);
             metrics.ColumnCount = 4;
             metrics.RowCount = 2;
             for (int i = 0; i < 4; i++)
@@ -88,7 +91,8 @@ namespace MunicipalTreasuryLedger
 
             TableLayoutPanel charts = new TableLayoutPanel();
             charts.Dock = DockStyle.Fill;
-            charts.BackColor = SurfaceBack;
+            charts.BackColor = Color.Transparent;
+            charts.Margin = new Padding(0);
             charts.ColumnCount = 2;
             charts.RowCount = 1;
             charts.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -96,12 +100,17 @@ namespace MunicipalTreasuryLedger
 
             dashboardMonthlyCollectionsChart = MakeDashboardChart("Monthly Collections");
             dashboardYearComparisonChart = MakeDashboardChart("Year-over-Year Revenue");
+            
+            dashboardMonthlyCollectionsChart.Margin = new Padding(0, 0, 12, 12);
+            dashboardYearComparisonChart.Margin = new Padding(0, 0, 12, 12);
+
             charts.Controls.Add(dashboardMonthlyCollectionsChart, 0, 0);
             charts.Controls.Add(dashboardYearComparisonChart, 1, 0);
 
             TableLayoutPanel grids = new TableLayoutPanel();
             grids.Dock = DockStyle.Fill;
-            grids.BackColor = SurfaceBack;
+            grids.BackColor = Color.Transparent;
+            grids.Margin = new Padding(0);
             grids.ColumnCount = 2;
             grids.RowCount = 2;
             grids.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -115,7 +124,7 @@ namespace MunicipalTreasuryLedger
             dashboardTopBalancesGrid.Columns.Add(MakeColumn("Owner", "Owner", true));
             dashboardTopBalancesGrid.Columns.Add(MakeColumn("Balance", "Balance", true));
             dashboardTopBalancesGrid.Columns.Add(MakeColumn("Status", "Status", true));
-            ConfigureDashboardGridColumns(dashboardTopBalancesGrid, new string[] { "Year", "Business", "Owner", "Balance", "Status" }, new int[] { 64, 130, 130, 96, 90 });
+            ConfigureDashboardGridColumns(dashboardTopBalancesGrid, new string[] { "Year", "Business", "Owner", "Balance", "Status" }, new int[] { 64, 130, 130, 96, 90 }, "Business");
 
             dashboardRecentPaymentsGrid = MakeGrid();
             dashboardRecentPaymentsGrid.Columns.Add(MakeColumn("Date", "Date", true));
@@ -123,20 +132,20 @@ namespace MunicipalTreasuryLedger
             dashboardRecentPaymentsGrid.Columns.Add(MakeColumn("Business", "Business", true));
             dashboardRecentPaymentsGrid.Columns.Add(MakeColumn("Schedule", "Schedule", true));
             dashboardRecentPaymentsGrid.Columns.Add(MakeColumn("Amount", "Amount", true));
-            ConfigureDashboardGridColumns(dashboardRecentPaymentsGrid, new string[] { "Date", "OR", "Business", "Schedule", "Amount" }, new int[] { 92, 112, 140, 96, 96 });
+            ConfigureDashboardGridColumns(dashboardRecentPaymentsGrid, new string[] { "Date", "OR", "Business", "Schedule", "Amount" }, new int[] { 92, 112, 140, 96, 96 }, "Business");
 
             dashboardQuarterGrid = MakeGrid();
             dashboardQuarterGrid.Columns.Add(MakeColumn("Schedule", "Schedule", true));
             dashboardQuarterGrid.Columns.Add(MakeColumn("Payments", "Payments", true));
             dashboardQuarterGrid.Columns.Add(MakeColumn("Amount", "Amount", true));
-            ConfigureDashboardGridColumns(dashboardQuarterGrid, new string[] { "Schedule", "Payments", "Amount" }, new int[] { 150, 110, 130 });
+            ConfigureDashboardGridColumns(dashboardQuarterGrid, new string[] { "Schedule", "Payments", "Amount" }, new int[] { 150, 110, 130 }, "Schedule");
 
             dashboardLineBusinessGrid = MakeGrid();
             dashboardLineBusinessGrid.Columns.Add(MakeColumn("Line", "Line of Business", true));
             dashboardLineBusinessGrid.Columns.Add(MakeColumn("Assessment", "Assessment", true));
             dashboardLineBusinessGrid.Columns.Add(MakeColumn("Paid", "Paid", true));
             dashboardLineBusinessGrid.Columns.Add(MakeColumn("Balance", "Balance", true));
-            ConfigureDashboardGridColumns(dashboardLineBusinessGrid, new string[] { "Line", "Assessment", "Paid", "Balance" }, new int[] { 190, 120, 100, 110 });
+            ConfigureDashboardGridColumns(dashboardLineBusinessGrid, new string[] { "Line", "Assessment", "Paid", "Balance" }, new int[] { 190, 120, 100, 110 }, "Line");
 
             grids.Controls.Add(MakeDashboardSection("Top Unpaid Balances", dashboardTopBalancesGrid), 0, 0);
             grids.Controls.Add(MakeDashboardSection("Recent Payments", dashboardRecentPaymentsGrid), 1, 0);
@@ -187,12 +196,13 @@ namespace MunicipalTreasuryLedger
             legend.Alignment = StringAlignment.Center;
             legend.Font = new Font("Segoe UI", 8F);
             legend.ForeColor = TextMuted;
+            legend.BackColor = Color.Transparent;
             chart.Legends.Add(legend);
 
             return chart;
         }
 
-        private void ConfigureDashboardGridColumns(DataGridView grid, string[] names, int[] widths)
+        private void ConfigureDashboardGridColumns(DataGridView grid, string[] names, int[] widths, string fillColumnName = "")
         {
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             grid.ScrollBars = ScrollBars.Both;
@@ -205,8 +215,15 @@ namespace MunicipalTreasuryLedger
                 }
 
                 grid.Columns[names[i]].Width = widths[i];
-                grid.Columns[names[i]].MinimumWidth = Math.Min(widths[i], 80);
-                grid.Columns[names[i]].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                grid.Columns[names[i]].MinimumWidth = Math.Min(widths[i], 60);
+                if (names[i] == fillColumnName)
+                {
+                    grid.Columns[names[i]].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
+                else
+                {
+                    grid.Columns[names[i]].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                }
             }
         }
 
@@ -214,31 +231,69 @@ namespace MunicipalTreasuryLedger
         {
             Panel panel = new Panel();
             panel.Dock = DockStyle.Fill;
-            panel.Margin = new Padding(0, 0, 10, 8);
-            panel.Padding = new Padding(12, 8, 12, 6);
-            panel.BackColor = GridAltBack;
+            panel.Margin = new Padding(0, 0, 12, 12);
+            panel.Padding = new Padding(18, 10, 12, 8);
+            panel.BackColor = SurfaceBack;
 
             Label titleLabel = new Label();
             titleLabel.Text = title;
             titleLabel.Dock = DockStyle.Top;
-            titleLabel.Height = 24;
+            titleLabel.Height = 22;
             titleLabel.ForeColor = TextMuted;
-            titleLabel.Font = new Font("Segoe UI Semibold", 8.8F, FontStyle.Bold);
+            titleLabel.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
             titleLabel.TextAlign = ContentAlignment.MiddleLeft;
             titleLabel.AutoEllipsis = true;
 
             valueLabel = new Label();
             valueLabel.Text = "0";
             valueLabel.Dock = DockStyle.Top;
-            valueLabel.Height = 34;
+            valueLabel.Height = 38;
             valueLabel.ForeColor = TextMain;
-            valueLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold);
+            valueLabel.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             valueLabel.TextAlign = ContentAlignment.MiddleLeft;
             valueLabel.AutoEllipsis = true;
 
             panel.Controls.Add(valueLabel);
             panel.Controls.Add(titleLabel);
+
+            panel.Paint += (s, e) => {
+                // Draw thin card border
+                using (Pen pen = new Pen(BorderLine, 1))
+                {
+                    e.Graphics.DrawRectangle(pen, 0, 0, panel.Width - 1, panel.Height - 1);
+                }
+
+                // Draw left colored accent bar
+                Color accentColor = GetMetricAccentColor(title);
+                using (SolidBrush brush = new SolidBrush(accentColor))
+                {
+                    e.Graphics.FillRectangle(brush, 1, 1, 4, panel.Height - 2);
+                }
+            };
+
             return panel;
+        }
+
+        private Color GetMetricAccentColor(string title)
+        {
+            string t = (title ?? "").ToLowerInvariant();
+            if (t.Contains("delinquent") || t.Contains("balance"))
+            {
+                return Danger;
+            }
+            if (t.Contains("assessment"))
+            {
+                return DarkThemeEnabled ? Color.FromArgb(96, 165, 250) : Color.FromArgb(37, 99, 235);
+            }
+            if (t.Contains("paid") || t.Contains("active") || t.Contains("rate") || t.Contains("business"))
+            {
+                return Accent;
+            }
+            if (t.Contains("closed"))
+            {
+                return TextMuted;
+            }
+            return Accent;
         }
 
         private Control MakeDashboardSection(string title, DataGridView grid)
@@ -247,6 +302,7 @@ namespace MunicipalTreasuryLedger
             panel.Dock = DockStyle.Fill;
             panel.Margin = new Padding(0, 0, 12, 12);
             panel.BackColor = SurfaceBack;
+            panel.Padding = new Padding(12, 8, 12, 8);
             panel.ColumnCount = 1;
             panel.RowCount = 2;
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
@@ -261,6 +317,14 @@ namespace MunicipalTreasuryLedger
 
             panel.Controls.Add(titleLabel, 0, 0);
             panel.Controls.Add(grid, 0, 1);
+
+            panel.Paint += (s, e) => {
+                using (Pen pen = new Pen(BorderLine, 1))
+                {
+                    e.Graphics.DrawRectangle(pen, 0, 0, panel.Width - 1, panel.Height - 1);
+                }
+            };
+
             return panel;
         }
 
