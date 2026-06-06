@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MunicipalTreasuryLedger</RootNamespace>
+    <AssemblyName>MunicipalTreasuryLedger</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>lib\System.Data.SQLite.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Models.cs" />
+    <Compile Include="LedgerValidation.cs" />
+    <Compile Include="CsvImportService.cs" />
+    <Compile Include="ExcelExportService.cs" />
+    <Compile Include="ArchiveService.cs" />
+    <Compile Include="DataProtectionService.cs" />
+    <Compile Include="SecurityService.cs" />
+    <Compile Include="AuditService.cs" />
+    <Compile Include="AuditHashService.cs" />
+    <Compile Include="AuditChangeFormatter.cs" />
+    <Compile Include="BackupService.cs" />
+    <Compile Include="BackupVerificationService.cs" />
+    <Compile Include="SystemHealthService.cs" />
+    <Compile Include="EncryptedBackupService.cs" />
+    <Compile Include="EncryptedDatabaseContainerService.cs" />
+    <Compile Include="DelinquencyService.cs" />
+    <Compile Include="ReceiptVerificationService.cs" />
+    <Compile Include="QrCodeService.cs" />
+    <Compile Include="PrintableReportService.cs" />
+    <Compile Include="LedgerServices.cs" />
+    <Compile Include="TreasuryDataStore.cs" />
+    <Compile Include="LoginForm.cs" />
+    <Compile Include="ChangePasswordForm.cs" />
+    <Compile Include="BackupPasswordForm.cs" />
+    <Compile Include="ImportPreviewForm.cs" />
+    <Compile Include="ArchivePurgeForm.cs" />
+    <Compile Include="MainForm.cs" />
+    <Compile Include="MainForm.Dashboard.cs" />
+    <Compile Include="MainForm.Owner.cs" />
+    <Compile Include="MainForm.Assessment.cs" />
+    <Compile Include="MainForm.Fees.cs" />
+    <Compile Include="MainForm.Payment.cs" />
+    <Compile Include="MainForm.Verification.cs" />
+    <Compile Include="MainForm.Report.cs" />
+    <Compile Include="MainForm.Settings.cs" />
+    <Compile Include="MainForm.Audit.cs" />
+    <Compile Include="MainForm.Users.cs" />
+    <Compile Include="MainForm.Services.cs" />
+    <Compile Include="MainForm.FileSession.cs" />
+    <Compile Include="MainForm.Helpers.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.manifest" />
+  </ItemGroup>
+</Project>

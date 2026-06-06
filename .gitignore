@@ -1,0 +1,23 @@
+# Build output
+dist/
+bin/
+obj/
+
+# Live ledger data and local backups
+*.db
+*.db.bak
+*.mtdb
+*.mtobak
+*.before-restore-*.bak
+*.before-encryption-*.bak
+Backups/
+
+# User/local files
+*.user
+*.suo
+.vs/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
