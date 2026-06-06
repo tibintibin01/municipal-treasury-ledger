@@ -27,7 +27,7 @@ namespace MunicipalTreasuryLedger
             Text = "Business Tax & Permit Collection System - Login";
             StartPosition = FormStartPosition.CenterScreen;
             Width = 760;
-            Height = 430;
+            Height = 500;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -91,7 +91,7 @@ namespace MunicipalTreasuryLedger
 
             Panel contentPanel = new Panel();
             contentPanel.Dock = DockStyle.Fill;
-            contentPanel.Padding = new Padding(46, 42, 46, 34);
+            contentPanel.Padding = new Padding(42, 38, 42, 30);
             contentPanel.BackColor = Color.White;
             shell.Controls.Add(contentPanel, 1, 0);
 
@@ -103,8 +103,8 @@ namespace MunicipalTreasuryLedger
             content.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
             content.RowStyles.Add(new RowStyle(SizeType.Absolute, 142));
             content.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
-            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
-            content.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 54));
             content.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
             contentPanel.Controls.Add(content);
 
