@@ -423,6 +423,16 @@ namespace MunicipalTreasuryLedger
             }
         }
 
+        private void SetColumnFill(DataGridView grid, string columnName, float fillWeight, int minimumWidth)
+        {
+            if (grid.Columns.Contains(columnName))
+            {
+                grid.Columns[columnName].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                grid.Columns[columnName].FillWeight = fillWeight;
+                grid.Columns[columnName].MinimumWidth = minimumWidth;
+            }
+        }
+
         private void AddLabeled(TableLayoutPanel grid, int row, int labelColumn, string label, Control control)
         {
             Label labelControl = MakeLabel(label);

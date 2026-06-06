@@ -84,11 +84,13 @@ namespace MunicipalTreasuryLedger
                 column.SortMode = DataGridViewColumnSortMode.Programmatic;
             }
 
-            SetColumnWidth(ownerList, "business", 110);
-            SetColumnWidth(ownerList, "owner", 90);
-            SetColumnWidth(ownerList, "status", 72);
-            SetColumnWidth(ownerList, "year", 54);
-            SetColumnWidth(ownerList, "balance", 78);
+            ownerList.ScrollBars = ScrollBars.Vertical;
+            ownerList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            SetColumnFill(ownerList, "business", 32, 72);
+            SetColumnFill(ownerList, "owner", 24, 64);
+            SetColumnFill(ownerList, "status", 18, 58);
+            SetColumnFill(ownerList, "year", 12, 46);
+            SetColumnFill(ownerList, "balance", 18, 64);
             ownerList.SelectionChanged += OwnerList_SelectedIndexChanged;
             ownerList.ColumnHeaderMouseClick += OwnerList_ColumnHeaderMouseClick;
             panel.Controls.Add(ownerList, 0, 4);

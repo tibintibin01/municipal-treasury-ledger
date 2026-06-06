@@ -1,6 +1,6 @@
 # Business Tax & Permit Collection System - Reviewer Demo Checklist
 
-Version: v0.3.43
+Version: v0.3.44
 
 ## Positioning
 

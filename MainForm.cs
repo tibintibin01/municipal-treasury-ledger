@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -160,7 +160,7 @@ namespace MunicipalTreasuryLedger
 
         public MainForm(TreasuryDataStore dataStore, LedgerDatabase database, UserAccount currentUser)
         {
-            Text = "Business Tax & Permit Collection System v0.3.43";
+            Text = "Business Tax & Permit Collection System v0.3.44";
             StartPosition = FormStartPosition.CenterScreen;
             Width = 1220;
             Height = 760;
@@ -256,6 +256,20 @@ namespace MunicipalTreasuryLedger
             }
 
             rightHost.Controls.Add(tabs);
+
+            Panel tabCover = new Panel();
+            tabCover.Name = "tabControlCover";
+            tabCover.BackColor = WindowBack;
+            tabCover.Height = tabs.ItemSize.Height + 2;
+
+            rightHost.Layout += (s, e) => {
+                int totalTabWidth = tabs.TabPages.Count * tabs.ItemSize.Width;
+                tabCover.Location = new Point(totalTabWidth - 2, 0);
+                tabCover.Width = Math.Max(0, rightHost.Width - totalTabWidth + 2);
+            };
+
+            rightHost.Controls.Add(tabCover);
+            tabCover.BringToFront();
         }
 
         private bool IsDarkThemeEnabled()
@@ -311,7 +325,7 @@ namespace MunicipalTreasuryLedger
             layout.ColumnCount = 2;
             layout.RowCount = 1;
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 930));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 850));
             layout.BackColor = SurfaceBack;
 
             TableLayoutPanel titleStack = new TableLayoutPanel();
