@@ -130,15 +130,15 @@ namespace MunicipalTreasuryLedger
             grid.Dock = DockStyle.Top;
             grid.AutoSize = true;
             grid.ColumnCount = 4;
-            grid.RowCount = 8;
+            grid.RowCount = 9;
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));
             grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 9; i++)
             {
-                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, i == 5 ? 76 : (i == 7 ? 64 : 36)));
+                grid.RowStyles.Add(new RowStyle(SizeType.Absolute, i == 5 ? 76 : 36));
             }
 
             ownerNameText = MakeTextBox();
@@ -175,10 +175,19 @@ namespace MunicipalTreasuryLedger
             AddLabeled(grid, 4, 0, "Type", registrationTypeCombo);
             AddLabeled(grid, 5, 0, "Remarks", ownerRemarksText);
             grid.SetColumnSpan(ownerRemarksText, 3);
-            AddLabeled(grid, 6, 0, "Consent", privacyConsentCheck);
-            AddLabeled(grid, 6, 2, "Consent date", privacyConsentDatePicker);
-            AddLabeled(grid, 7, 0, "Method", privacyConsentMethodCombo);
-            AddLabeled(grid, 7, 2, "Notice version", privacyNoticeVersionText);
+            Label privacySectionLabel = new Label();
+            privacySectionLabel.Text = "Data Privacy";
+            privacySectionLabel.Dock = DockStyle.Fill;
+            privacySectionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            privacySectionLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            privacySectionLabel.ForeColor = Accent;
+            grid.Controls.Add(privacySectionLabel, 0, 6);
+            grid.SetColumnSpan(privacySectionLabel, 4);
+
+            AddLabeled(grid, 7, 0, "Consent", privacyConsentCheck);
+            AddLabeled(grid, 7, 2, "Consent date", privacyConsentDatePicker);
+            AddLabeled(grid, 8, 0, "Method", privacyConsentMethodCombo);
+            AddLabeled(grid, 8, 2, "Notice version", privacyNoticeVersionText);
 
             Label privacyNotice = new Label();
             privacyNotice.Text = "Privacy notice: personal and business information is collected and processed for business registration, renewal assessment, collection, reporting, audit, and legally required LGU records under RA 10173.";
