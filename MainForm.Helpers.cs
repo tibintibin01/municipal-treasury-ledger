@@ -123,6 +123,7 @@ namespace MunicipalTreasuryLedger
             button.Height = 34;
             button.Margin = new Padding(8, 2, 0, 4);
             button.Font = new Font("Segoe UI Semibold", 9.2F, FontStyle.Bold);
+            EnsureButtonWidth(button);
             return button;
         }
 
@@ -235,7 +236,7 @@ namespace MunicipalTreasuryLedger
                 return;
             }
 
-            int minimum = TextRenderer.MeasureText(button.Text, button.Font).Width + 24;
+            int minimum = TextRenderer.MeasureText(button.Text, button.Font).Width + button.Padding.Left + button.Padding.Right + 28;
             if (button.Width < minimum)
             {
                 button.Width = minimum;

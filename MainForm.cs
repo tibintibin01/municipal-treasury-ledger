@@ -195,7 +195,7 @@ namespace MunicipalTreasuryLedger
             shell.Dock = DockStyle.Fill;
             shell.ColumnCount = 1;
             shell.RowCount = 2;
-            shell.RowStyles.Add(new RowStyle(SizeType.Absolute, 112));
+            shell.RowStyles.Add(new RowStyle(SizeType.Absolute, 132));
             shell.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             shell.BackColor = WindowBack;
             Controls.Add(shell);
@@ -233,8 +233,9 @@ namespace MunicipalTreasuryLedger
             TabControl tabs = new TabControl();
             tabs.Dock = DockStyle.Fill;
             tabs.DrawMode = TabDrawMode.OwnerDrawFixed;
-            tabs.ItemSize = new Size(82, 38);
+            tabs.ItemSize = new Size(102, 38);
             tabs.SizeMode = TabSizeMode.Fixed;
+            tabs.Multiline = true;
             tabs.Padding = new Point(16, 6);
             tabs.DrawItem += Tabs_DrawItem;
             tabs.TabPages.Add(BuildDashboardTab());
@@ -256,20 +257,6 @@ namespace MunicipalTreasuryLedger
             }
 
             rightHost.Controls.Add(tabs);
-
-            Panel tabCover = new Panel();
-            tabCover.Name = "tabControlCover";
-            tabCover.BackColor = WindowBack;
-            tabCover.Height = tabs.ItemSize.Height + 2;
-
-            rightHost.Layout += (s, e) => {
-                int totalTabWidth = tabs.TabPages.Count * tabs.ItemSize.Width;
-                tabCover.Location = new Point(totalTabWidth - 2, 0);
-                tabCover.Width = Math.Max(0, rightHost.Width - totalTabWidth + 2);
-            };
-
-            rightHost.Controls.Add(tabCover);
-            tabCover.BringToFront();
         }
 
         private bool IsDarkThemeEnabled()
@@ -324,8 +311,8 @@ namespace MunicipalTreasuryLedger
             layout.Dock = DockStyle.Fill;
             layout.ColumnCount = 2;
             layout.RowCount = 1;
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 850));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 64));
             layout.BackColor = SurfaceBack;
 
             TableLayoutPanel titleStack = new TableLayoutPanel();
@@ -366,7 +353,7 @@ namespace MunicipalTreasuryLedger
             rightStack.Dock = DockStyle.Fill;
             rightStack.ColumnCount = 1;
             rightStack.RowCount = 3;
-            rightStack.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
+            rightStack.RowStyles.Add(new RowStyle(SizeType.Absolute, 70));
             rightStack.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
             rightStack.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             rightStack.BackColor = SurfaceBack;
@@ -374,46 +361,46 @@ namespace MunicipalTreasuryLedger
             FlowLayoutPanel actions = new FlowLayoutPanel();
             actions.Dock = DockStyle.Fill;
             actions.FlowDirection = FlowDirection.RightToLeft;
-            actions.WrapContents = false;
-            actions.Padding = new Padding(0, 2, 0, 0);
+            actions.WrapContents = true;
+            actions.Padding = new Padding(0, 0, 0, 0);
 
             Button exportButton = MakeHeaderButton("Export");
-            exportButton.Width = 104;
+            exportButton.Width = 112;
             exportButton.Click += ExportMenu_Click;
             actions.Controls.Add(exportButton);
 
             Button importButton = MakeHeaderButton("Import");
-            importButton.Width = 108;
+            importButton.Width = 112;
             importButton.Click += ImportCsv_Click;
             actions.Controls.Add(importButton);
 
             Button restoreButton = MakeHeaderButton("Restore");
-            restoreButton.Width = 96;
+            restoreButton.Width = 112;
             restoreButton.Click += RestoreBackup_Click;
             actions.Controls.Add(restoreButton);
 
             Button backupButton = MakeHeaderButton("Backup");
-            backupButton.Width = 96;
+            backupButton.Width = 112;
             backupButton.Click += BackupData_Click;
             actions.Controls.Add(backupButton);
 
             Button backupFolderButton = MakeHeaderButton("Backup To");
-            backupFolderButton.Width = 112;
+            backupFolderButton.Width = 126;
             backupFolderButton.Click += ConfigureBackupFolder_Click;
             actions.Controls.Add(backupFolderButton);
 
             Button saveButton = MakeHeaderButton("Save Data");
-            saveButton.Width = 104;
+            saveButton.Width = 118;
             saveButton.Click += SaveMenu_Click;
             actions.Controls.Add(saveButton);
 
             Button themeButton = MakeHeaderButton("Theme");
-            themeButton.Width = 94;
+            themeButton.Width = 108;
             themeButton.Click += ToggleTheme_Click;
             actions.Controls.Add(themeButton);
 
             Button passwordButton = MakeHeaderButton("Password");
-            passwordButton.Width = 100;
+            passwordButton.Width = 122;
             passwordButton.Click += ChangePassword_Click;
             actions.Controls.Add(passwordButton);
 
