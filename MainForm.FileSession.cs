@@ -573,6 +573,39 @@ namespace MunicipalTreasuryLedger
             MessageBox.Show("Password changed.", "Password updated", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void ToggleTheme_Click(object sender, EventArgs e)
+        {
+            if (database.Settings == null)
+            {
+                database.Settings = new AppSettings();
+            }
+
+            bool enableDarkMode = !database.Settings.DarkModeEnabled;
+            database.Settings.DarkModeEnabled = enableDarkMode;
+            RunWithBusy("Saving theme setting...", delegate
+            {
+                LogAction(
+                    "Change Theme",
+                    "Settings",
+                    "",
+                    enableDarkMode ? "Dark mode enabled" : "Dark mode disabled");
+                dataStore.Save(database);
+            });
+
+            if (settingsDarkModeCheck != null)
+            {
+                settingsDarkModeCheck.Checked = enableDarkMode;
+            }
+
+            RefreshAuditLog();
+            MessageBox.Show(
+                (enableDarkMode ? "Dark mode enabled." : "Light mode enabled.") +
+                "\n\nClose and reopen the app to apply the appearance change.",
+                "Theme saved",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
         private void ExitMenu_Click(object sender, EventArgs e)
         {
             Close();

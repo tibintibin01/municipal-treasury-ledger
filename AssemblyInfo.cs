@@ -7,5 +7,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Business Tax & Permit Collection System")]
 [assembly: AssemblyCopyright("Copyright 2026")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("0.3.42.0")]
-[assembly: AssemblyFileVersion("0.3.42.0")]
+[assembly: AssemblyVersion("0.3.43.0")]
+[assembly: AssemblyFileVersion("0.3.43.0")]

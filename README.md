@@ -204,7 +204,7 @@ The app highlights invalid fields with a red background, shows a field-level err
 
 ## Appearance and DPI
 
-The **Settings** tab includes a dark mode option. Save the setting, close the app, and reopen it to apply the appearance change. The executable also includes a Windows DPI-awareness manifest and uses DPI scaling so controls render more reliably on high-resolution displays.
+Use the **Theme** header button to switch between light and dark mode, then close and reopen the app to apply the appearance change. The **Settings** tab also includes the same dark mode option under Appearance. The executable includes a Windows DPI-awareness manifest and uses DPI scaling so controls render more reliably on high-resolution displays.
 
 ## Restore last save
 

@@ -160,7 +160,7 @@ namespace MunicipalTreasuryLedger
 
         public MainForm(TreasuryDataStore dataStore, LedgerDatabase database, UserAccount currentUser)
         {
-            Text = "Business Tax & Permit Collection System v0.3.42";
+            Text = "Business Tax & Permit Collection System v0.3.43";
             StartPosition = FormStartPosition.CenterScreen;
             Width = 1220;
             Height = 760;
@@ -311,7 +311,7 @@ namespace MunicipalTreasuryLedger
             layout.ColumnCount = 2;
             layout.RowCount = 1;
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 840));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 930));
             layout.BackColor = SurfaceBack;
 
             TableLayoutPanel titleStack = new TableLayoutPanel();
@@ -392,6 +392,11 @@ namespace MunicipalTreasuryLedger
             saveButton.Width = 104;
             saveButton.Click += SaveMenu_Click;
             actions.Controls.Add(saveButton);
+
+            Button themeButton = MakeHeaderButton("Theme");
+            themeButton.Width = 94;
+            themeButton.Click += ToggleTheme_Click;
+            actions.Controls.Add(themeButton);
 
             Button passwordButton = MakeHeaderButton("Password");
             passwordButton.Width = 100;

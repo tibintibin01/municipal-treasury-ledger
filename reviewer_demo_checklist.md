@@ -1,6 +1,6 @@
 # Business Tax & Permit Collection System - Reviewer Demo Checklist
 
-Version: v0.3.42
+Version: v0.3.43
 
 ## Positioning
 
@@ -67,7 +67,7 @@ It is not positioned as a complete Municipal Treasury replacement. It does not c
     - Open Users tab as Admin and confirm role/user management is available.
 
 11. Appearance
-    - Enable dark mode in Settings.
+    - Use the Theme header button to enable dark mode, or enable it in Settings under Appearance.
     - Save, close, and reopen the app.
     - Confirm dark mode is applied.
     - Confirm controls remain readable on the target monitor.

@@ -180,6 +180,11 @@ namespace MunicipalTreasuryLedger
                 return "●";
             }
 
+            if (text.StartsWith("theme"))
+            {
+                return "◐";
+            }
+
             if (text.StartsWith("refresh") || text.StartsWith("reload"))
             {
                 return "↻";
