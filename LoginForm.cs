@@ -10,6 +10,7 @@ namespace MunicipalTreasuryLedger
         private readonly TreasuryDataStore dataStore;
         private TextBox usernameText;
         private TextBox passwordText;
+        private CheckBox showPasswordCheck;
         private Label messageLabel;
 
         public UserAccount AuthenticatedUser { get; private set; }
@@ -25,8 +26,8 @@ namespace MunicipalTreasuryLedger
             this.dataStore = dataStore;
             Text = "Business Tax & Permit Collection System - Login";
             StartPosition = FormStartPosition.CenterScreen;
-            Width = 430;
-            Height = 310;
+            Width = 760;
+            Height = 430;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -38,37 +39,98 @@ namespace MunicipalTreasuryLedger
 
         private void BuildLayout()
         {
-            Panel panel = new Panel();
-            panel.Dock = DockStyle.Fill;
-            panel.Padding = new Padding(28);
-            panel.BackColor = Color.White;
-            Controls.Add(panel);
+            TableLayoutPanel shell = new TableLayoutPanel();
+            shell.Dock = DockStyle.Fill;
+            shell.ColumnCount = 2;
+            shell.RowCount = 1;
+            shell.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 285));
+            shell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            shell.BackColor = Color.FromArgb(246, 248, 251);
+            Controls.Add(shell);
+
+            Panel brandPanel = new Panel();
+            brandPanel.Dock = DockStyle.Fill;
+            brandPanel.Padding = new Padding(28, 32, 28, 28);
+            brandPanel.BackColor = Color.FromArgb(15, 118, 110);
+            brandPanel.Paint += BrandPanel_Paint;
+            shell.Controls.Add(brandPanel, 0, 0);
+
+            TableLayoutPanel brandLayout = new TableLayoutPanel();
+            brandLayout.Dock = DockStyle.Fill;
+            brandLayout.ColumnCount = 1;
+            brandLayout.RowCount = 4;
+            brandLayout.BackColor = Color.Transparent;
+            brandLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 82));
+            brandLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 64));
+            brandLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            brandLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 78));
+            brandPanel.Controls.Add(brandLayout);
+
+            Label appName = new Label();
+            appName.Text = "Business Tax & Permit Collection System";
+            appName.Dock = DockStyle.Fill;
+            appName.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            appName.ForeColor = Color.White;
+            appName.TextAlign = ContentAlignment.TopLeft;
+            brandLayout.Controls.Add(appName, 0, 0);
+
+            Label appSubtitle = new Label();
+            appSubtitle.Text = "Business registration, renewal assessment, and payment records.";
+            appSubtitle.Dock = DockStyle.Fill;
+            appSubtitle.Font = new Font("Segoe UI", 9.5F);
+            appSubtitle.ForeColor = Color.FromArgb(213, 245, 239);
+            brandLayout.Controls.Add(appSubtitle, 0, 1);
+
+            Label securityNote = new Label();
+            securityNote.Text = "Authorized municipal treasury staff only. Use your own account for audit tracking.";
+            securityNote.Dock = DockStyle.Fill;
+            securityNote.Font = new Font("Segoe UI", 9F);
+            securityNote.ForeColor = Color.FromArgb(213, 245, 239);
+            securityNote.TextAlign = ContentAlignment.BottomLeft;
+            brandLayout.Controls.Add(securityNote, 0, 3);
+
+            Panel contentPanel = new Panel();
+            contentPanel.Dock = DockStyle.Fill;
+            contentPanel.Padding = new Padding(46, 42, 46, 34);
+            contentPanel.BackColor = Color.White;
+            shell.Controls.Add(contentPanel, 1, 0);
+
+            TableLayoutPanel content = new TableLayoutPanel();
+            content.Dock = DockStyle.Fill;
+            content.ColumnCount = 1;
+            content.RowCount = 7;
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 48));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 142));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
+            content.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
+            contentPanel.Controls.Add(content);
 
             Label title = new Label();
             title.Text = "Sign in";
-            title.Dock = DockStyle.Top;
-            title.Height = 38;
-            title.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold);
-            title.ForeColor = Color.FromArgb(31, 41, 55);
-            panel.Controls.Add(title);
+            title.Dock = DockStyle.Fill;
+            title.Font = new Font("Segoe UI Semibold", 21F, FontStyle.Bold);
+            title.ForeColor = Color.FromArgb(17, 24, 39);
+            title.TextAlign = ContentAlignment.MiddleLeft;
+            content.Controls.Add(title, 0, 0);
 
             Label subtitle = new Label();
-            subtitle.Text = "Use your assigned business tax collection account.";
-            subtitle.Dock = DockStyle.Top;
-            subtitle.Height = 28;
+            subtitle.Text = "Enter your assigned account to continue.";
+            subtitle.Dock = DockStyle.Fill;
             subtitle.ForeColor = Color.FromArgb(99, 111, 128);
-            panel.Controls.Add(subtitle);
-            subtitle.BringToFront();
+            subtitle.TextAlign = ContentAlignment.MiddleLeft;
+            content.Controls.Add(subtitle, 0, 1);
 
             TableLayoutPanel form = new TableLayoutPanel();
-            form.Dock = DockStyle.Top;
-            form.Height = 118;
-            form.ColumnCount = 2;
-            form.RowCount = 2;
-            form.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 94));
-            form.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            form.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
-            form.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
+            form.Dock = DockStyle.Fill;
+            form.ColumnCount = 1;
+            form.RowCount = 4;
+            form.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
+            form.RowStyles.Add(new RowStyle(SizeType.Absolute, 38));
+            form.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
+            form.RowStyles.Add(new RowStyle(SizeType.Absolute, 38));
             form.Padding = new Padding(0, 12, 0, 0);
 
             usernameText = MakeTextBox();
@@ -76,29 +138,47 @@ namespace MunicipalTreasuryLedger
             passwordText.UseSystemPasswordChar = true;
             passwordText.KeyDown += PasswordText_KeyDown;
 
-            AddRow(form, 0, "Username", usernameText);
-            AddRow(form, 1, "Password", passwordText);
-            panel.Controls.Add(form);
-            form.BringToFront();
+            AddField(form, 0, "Username", usernameText);
+            AddField(form, 2, "Password", passwordText);
+            content.Controls.Add(form, 0, 2);
+
+            showPasswordCheck = new CheckBox();
+            showPasswordCheck.Text = "Show password";
+            showPasswordCheck.Dock = DockStyle.Fill;
+            showPasswordCheck.ForeColor = Color.FromArgb(75, 85, 99);
+            showPasswordCheck.CheckedChanged += ShowPasswordCheck_CheckedChanged;
+            content.Controls.Add(showPasswordCheck, 0, 3);
 
             messageLabel = new Label();
-            messageLabel.Dock = DockStyle.Top;
-            messageLabel.Height = 28;
+            messageLabel.Dock = DockStyle.Fill;
             messageLabel.ForeColor = Color.FromArgb(185, 28, 28);
-            panel.Controls.Add(messageLabel);
-            messageLabel.BringToFront();
+            messageLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            messageLabel.TextAlign = ContentAlignment.MiddleLeft;
+            content.Controls.Add(messageLabel, 0, 4);
 
             FlowLayoutPanel actions = new FlowLayoutPanel();
-            actions.Dock = DockStyle.Top;
-            actions.Height = 44;
+            actions.Dock = DockStyle.Fill;
             actions.FlowDirection = FlowDirection.RightToLeft;
+            actions.WrapContents = false;
 
             Button loginButton = MakeButton("Login");
             loginButton.Click += LoginButton_Click;
             actions.Controls.Add(loginButton);
+            AcceptButton = loginButton;
 
-            panel.Controls.Add(actions);
-            actions.BringToFront();
+            Button closeButton = MakeSecondaryButton("Close");
+            closeButton.Click += CloseButton_Click;
+            actions.Controls.Add(closeButton);
+
+            content.Controls.Add(actions, 0, 5);
+
+            Label footer = new Label();
+            footer.Text = "Forgot your password? Ask the system Admin to reset it.";
+            footer.Dock = DockStyle.Fill;
+            footer.ForeColor = Color.FromArgb(107, 114, 128);
+            footer.Font = new Font("Segoe UI", 8.7F);
+            footer.TextAlign = ContentAlignment.BottomLeft;
+            content.Controls.Add(footer, 0, 6);
             usernameText.Focus();
         }
 
@@ -108,6 +188,7 @@ namespace MunicipalTreasuryLedger
             textBox.Dock = DockStyle.Fill;
             textBox.BorderStyle = BorderStyle.FixedSingle;
             textBox.Font = new Font("Segoe UI", 10F);
+            textBox.Margin = new Padding(0, 0, 0, 8);
             return textBox;
         }
 
@@ -115,25 +196,65 @@ namespace MunicipalTreasuryLedger
         {
             Button button = new Button();
             button.Text = text;
-            button.Width = 96;
-            button.Height = 32;
+            button.Width = 118;
+            button.Height = 36;
+            button.Margin = new Padding(10, 4, 0, 4);
             button.FlatStyle = FlatStyle.Flat;
             button.BackColor = Color.FromArgb(15, 118, 110);
             button.ForeColor = Color.White;
             button.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             button.FlatAppearance.BorderColor = Color.FromArgb(17, 94, 89);
+            button.FlatAppearance.MouseOverBackColor = Color.FromArgb(17, 94, 89);
+            button.Cursor = Cursors.Hand;
             return button;
         }
 
-        private void AddRow(TableLayoutPanel form, int row, string label, Control control)
+        private Button MakeSecondaryButton(string text)
+        {
+            Button button = MakeButton(text);
+            button.BackColor = Color.White;
+            button.ForeColor = Color.FromArgb(31, 41, 55);
+            button.FlatAppearance.BorderColor = Color.FromArgb(203, 213, 225);
+            button.FlatAppearance.MouseOverBackColor = Color.FromArgb(241, 245, 249);
+            return button;
+        }
+
+        private void AddField(TableLayoutPanel form, int labelRow, string label, Control control)
         {
             Label labelControl = new Label();
             labelControl.Text = label;
             labelControl.Dock = DockStyle.Fill;
             labelControl.TextAlign = ContentAlignment.MiddleLeft;
             labelControl.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            form.Controls.Add(labelControl, 0, row);
-            form.Controls.Add(control, 1, row);
+            labelControl.ForeColor = Color.FromArgb(55, 65, 81);
+            form.Controls.Add(labelControl, 0, labelRow);
+            form.Controls.Add(control, 0, labelRow + 1);
+        }
+
+        private void BrandPanel_Paint(object sender, PaintEventArgs e)
+        {
+            using (SolidBrush brush = new SolidBrush(Color.FromArgb(20, 184, 166)))
+            {
+                e.Graphics.FillRectangle(brush, 0, 0, 6, Height);
+            }
+
+            using (Pen pen = new Pen(Color.FromArgb(45, 212, 191), 2))
+            {
+                e.Graphics.DrawRectangle(pen, 28, 174, 70, 70);
+                e.Graphics.DrawLine(pen, 42, 208, 84, 208);
+                e.Graphics.DrawLine(pen, 63, 188, 63, 230);
+            }
+        }
+
+        private void ShowPasswordCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            passwordText.UseSystemPasswordChar = !showPasswordCheck.Checked;
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void PasswordText_KeyDown(object sender, KeyEventArgs e)
