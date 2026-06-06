@@ -14,42 +14,6 @@ You do not need to be a computer expert. Read the short workflow first, then use
 
 Important: Before deleting records, restoring backups, importing large files, archiving old years, changing settings, or managing users, ask the Treasurer or system Admin.
 
-## Screenshot Guide
-
-When this manual is prepared for printing or PDF, replace these placeholders with screenshots from the actual app.
-
-[Screenshot: Login screen]
-
-[Screenshot: Main screen after successful login]
-
-[Screenshot: Dashboard in light mode]
-
-[Screenshot: Dashboard in dark mode]
-
-[Screenshot: Business Records panel]
-
-[Screenshot: Owner tab]
-
-[Screenshot: Assessment tab]
-
-[Screenshot: Fees tab]
-
-[Screenshot: Payments tab]
-
-[Screenshot: Receipt preview window]
-
-[Screenshot: Verify tab]
-
-[Screenshot: Reports tab]
-
-[Screenshot: Delinquency notice preview]
-
-[Screenshot: Settings tab]
-
-[Screenshot: Audit Log tab]
-
-[Screenshot: Users tab]
-
 ## 1. What This App Is
 
 The Business Tax & Permit Collection System is a Windows desktop app for recording business registration, renewal assessment, business tax and permit charges, payments, OR numbers, balances, reports, and related audit records.
