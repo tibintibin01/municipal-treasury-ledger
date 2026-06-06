@@ -197,7 +197,7 @@ def build_docx():
     subtitle = doc.add_paragraph()
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
     subtitle.paragraph_format.space_after = Pt(18)
-    run = subtitle.add_run("User Manual")
+    run = subtitle.add_run("Office User Manual and Daily Workflow Guide")
     run.font.name = "Calibri"
     run.font.size = Pt(16)
     run.font.color.rgb = RGBColor.from_string(DARK_BLUE)
@@ -209,7 +209,7 @@ def build_docx():
 
     add_note_box(
         doc,
-        "This manual is written for beginner users. Follow the steps in order and ask an Admin or Treasurer before restoring backups, deleting records, or changing system settings.",
+        "This manual is written for real office use. Follow the daily workflow, keep backups current, and ask an Admin or Treasurer before restoring backups, deleting records, importing large files, or changing system settings.",
     )
     doc.add_page_break()
 
