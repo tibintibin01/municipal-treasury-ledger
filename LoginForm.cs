@@ -237,13 +237,6 @@ namespace MunicipalTreasuryLedger
             {
                 e.Graphics.FillRectangle(brush, 0, 0, 6, Height);
             }
-
-            using (Pen pen = new Pen(Color.FromArgb(45, 212, 191), 2))
-            {
-                e.Graphics.DrawRectangle(pen, 28, 174, 70, 70);
-                e.Graphics.DrawLine(pen, 42, 208, 84, 208);
-                e.Graphics.DrawLine(pen, 63, 188, 63, 230);
-            }
         }
 
         private void ShowPasswordCheck_CheckedChanged(object sender, EventArgs e)
